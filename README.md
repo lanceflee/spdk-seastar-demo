@@ -2,6 +2,7 @@
 Just for study Seastar and SPDK, learn to use Seastar instead of SPDK event as the async. framework. 
 
 Trying to use (DPDK + Seastar + SPDK) to do some run-to-completion experiments.
+This demo is implemented with a simple Seastar shard(with unique qpair allocated) model while shared nothing writing and reading "Hello World" in parallel.
 
 Known issues:
 1. It's hard to build with static library(you could see from my comments in CMake file)

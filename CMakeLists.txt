@@ -31,9 +31,7 @@ find_package (Seastar REQUIRED)
 add_executable(demo demo.cc)
 
 #rollback to use sharedlib
-target_link_libraries (demo PRIVATE Seastar::seastar -lspdk -lspdk_env_dpdk -lrte_bus_pci -lrte_eal
-                        -lrte_mbuf -lrte_kvargs -lrte_mempool -lrte_mempool_ring -lrte_pci -lrte_ring -lrte_telemetry
-                        -lrte_power -lrte_timer)
+target_link_libraries (demo PRIVATE Seastar::seastar -lspdk -lspdk_env_dpdk -ldpdk)
 
 #build Seastar+DPDK+SPDK outside, see install-dep.sh
 #Refer to ceph/cmake/modules/Build{SPDK/DPDK}.cmake

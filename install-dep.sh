@@ -17,7 +17,7 @@ git submodule update --init --recursive
 cd ${SEASTAR_SOURCE_DIR}
 #add --cook fmt if needed
 #./configure.py --mode=release --enable-dpdk
-./configure.py --mode=release
+./configure.py --mode=release --cook fmt
 ninja -C build/release
 
 #build spdk

@@ -1,0 +1,6 @@
+[submodule "spdk"]
+	path = spdk
+	url = git@github.com:spdk/spdk.git
+[submodule "seastar"]
+	path = seastar
+	url = git@github.com:scylladb/seastar.git

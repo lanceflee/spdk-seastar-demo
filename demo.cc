@@ -2,6 +2,7 @@
 
 
 seastar::sharded<demo_context> ctx;
+static std::string g_device_name = "trtype:PCIe traddr:0000:01:00.0";
 
 
 seastar::future<> io_handler::handle_io()
@@ -70,28 +71,27 @@ add_trid(struct spdk_nvme_transport_id *trid, const char *trid_str)
 	return 0;
 }
 
-bool demo_device_init(){
+seastar::future<> demo_device_init(){
 	struct spdk_nvme_transport_id trid;
 	struct spdk_env_opts opts;
 
     //Replace traddr and pay great attention to Intel VMD devices
-	char *trid_str = "trtype:PCIe traddr:0000:01:00.0";
 	
 	spdk_env_opts_init(&opts);
 	opts.name = "demo";
 	if(spdk_env_init(&opts)<0){
 		std::cerr << "Failed to init env" <<"\n";
-		return false;
+		return seastar::make_exception_future<>(demo_exception());
 	}
 	memset(&trid, 0, sizeof(trid));
-	add_trid(&trid,trid_str);
+	add_trid(&trid,g_device_name);
 
 	//Local Device
 	//trid.trtype = SPDK_NVME_TRANSPORT_PCIE;
 	if (spdk_nvme_probe(&trid, NULL, probe_cb, attach_cb, NULL) != 0) {
-		return false;
+		return seastar::make_exception_future<>(demo_exception());
 	}
-	return true;
+	return return seastar::make_ready_future<>();
 }
 
 seastar::future<> start_service(){
@@ -111,13 +111,22 @@ seastar::future<> start_service(){
 int main(int argc, char** argv) {
 
 	seastar::app_template app;
+	namespace bpo = boost::program_options;
+    app.add_options()
+        ("device",bpo::value<seastar::sstring>()->default_value("trtype:PCIe traddr:0000:01:00.0"),"device addr")
+        ;
 
 	try {
-		if(!demo_device_init()){
-			std::cerr << "Failed to Probe NVMe Devices" <<"\n";
-			return 1;
-		}
-		app.run(argc, argv, start_service);
+		app.run(argc, argv, [&app]{
+			auto& args = app.configuration();
+            std::string device = args["device"].as<seastar::sstring>().c_str();
+			if(device){
+				g_device_name = device;
+				std::cout<<"Using device addr:"<<g_device_name<<std::endl;
+			}
+			return demo_device_init().then([]{return start_service();});
+		});
+		
 		spdk_nvme_detach(g_ctrlr);
 	} catch (...) {
 

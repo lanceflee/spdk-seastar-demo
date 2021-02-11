@@ -7,9 +7,8 @@ This demo is implemented with a simple Seastar shard(with unique qpair allocated
 Known issues:
 1. It's hard to build with static library(you could see from my comments in CMake file)
 2. Not compile with Seastar's DPDK(--enable-dpdk), may conflict with SPDK
+3. Not parse positional cli arguments, just pass addr like"0000:01:00.0". 
 
-
-Replace the traddr in demo_device_init()(demo.cc) with the right PCIe addr of your machine, because not parse cli arguments yet.
 
 Usage:
 1. git clone git@github.com:lanceflee/spdk-seastar-demo.git
@@ -18,4 +17,8 @@ Usage:
 4. mkdir build && cd  build
 5. cmake ..
 6. make
-7. ./demo -c2 (may not work if not pass -c)
+7. ./demo -c2 --device 0000:01:00.0(your PCIe device addr)
+(may not work if not pass -c)
+
+PS: make sure: setup system hugepage before run.
+sh ${spdk}/scripts/setup.sh

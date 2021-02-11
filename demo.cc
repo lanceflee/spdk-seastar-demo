@@ -91,7 +91,7 @@ seastar::future<> demo_device_init(){
 	if (spdk_nvme_probe(&trid, NULL, probe_cb, attach_cb, NULL) != 0) {
 		return seastar::make_exception_future<>(demo_exception());
 	}
-	return return seastar::make_ready_future<>();
+	return seastar::make_ready_future<>();
 }
 
 seastar::future<> start_service(){

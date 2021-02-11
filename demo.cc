@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
 	seastar::app_template app;
 	namespace bpo = boost::program_options;
     app.add_options()
-        ("device",bpo::value<seastar::sstring>()->default_value("trtype:PCIe traddr:0000:01:00.0"),"device addr")
+        ("device",bpo::value<seastar::sstring>()->default_value("0000:01:00.0"),"device addr")
         ;
 
 	try {
@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
 			auto& args = app.configuration();
             std::string device = args["device"].as<seastar::sstring>().c_str();
 			if(device!=""){
-				g_device_name = device;
+				g_device_name = "trtype:PCIe traddr:"+device;
 				std::cout<<"Using device addr:"<<g_device_name<<std::endl;
 			}
 			return demo_device_init().then([]{return start_service();});

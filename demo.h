@@ -10,6 +10,7 @@
 #include "spdk/stdinc.h"
 #include "spdk/env.h"
 #include "spdk/nvme.h"
+#include <string>
 
 extern struct spdk_nvme_ctrlr *g_ctrlr;
 class demo_exception : public std::exception{
@@ -76,5 +77,5 @@ class demo_context{
 };
 
 
-bool demo_device_init();
+seastar::future<> demo_device_init();
 seastar::future<> start_service();

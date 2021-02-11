@@ -84,7 +84,7 @@ seastar::future<> demo_device_init(){
 		return seastar::make_exception_future<>(demo_exception());
 	}
 	memset(&trid, 0, sizeof(trid));
-	add_trid(&trid,g_device_name);
+	add_trid(&trid,g_device_name.c_str());
 
 	//Local Device
 	//trid.trtype = SPDK_NVME_TRANSPORT_PCIE;
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
 		app.run(argc, argv, [&app]{
 			auto& args = app.configuration();
             std::string device = args["device"].as<seastar::sstring>().c_str();
-			if(device){
+			if(device!=""){
 				g_device_name = device;
 				std::cout<<"Using device addr:"<<g_device_name<<std::endl;
 			}

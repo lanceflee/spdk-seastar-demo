@@ -6,7 +6,7 @@ This demo is implemented with a simple Seastar shard(with unique qpair allocated
 
 ***
 
-###Known issues:  
+#Known issues:  
 1. It's hard to build with static library(you could see from my comments in CMake file) 
 
 2. Not compile with Seastar's DPDK(--enable-dpdk), may conflict with SPDK
@@ -14,7 +14,7 @@ This demo is implemented with a simple Seastar shard(with unique qpair allocated
 
 ***
 
-###Usage:  
+#Usage:  
 1. git clone git@github.com:lanceflee/spdk-seastar-demo.git
 2. cd spdk-seastar-demo
 3. sh install-dep.sh
